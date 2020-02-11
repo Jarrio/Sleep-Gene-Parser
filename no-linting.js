@@ -1,2 +1,2 @@
 /* eslint-disable */
-var firebase = require("firebase/app");
+serviceWorker.register();

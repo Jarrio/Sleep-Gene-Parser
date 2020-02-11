@@ -1,11 +1,9 @@
 {
-  "name": "tui",
+  "name": "sleep-gene-analysis",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://jarrio.github.io/Sleep-Gene-Parser/",
   "dependencies": {
-    "@devexpress/dx-react-chart": "^2.4.0",
-    "@devexpress/dx-react-chart-material-ui": "^2.4.0",
-    "@devexpress/dx-react-core": "^2.4.0",
     "@material-ui/core": "4.7.2",
     "@material-ui/icons": "4.5.1",
     "@material-ui/lab": "4.0.0-alpha.35",
@@ -13,16 +11,13 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "browserify": "^16.5.0",
-    "firebase": "^7.6.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "3.3.0",
-    "recharts": "^2.0.0-beta.1"
+    "react-scripts": "3.3.0"
   },
   "scripts": {
-	 "predeploy": "npm run build",
-	 "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
