@@ -1,0 +1,444 @@
+{
+	expr: EParenthesis({
+		expr: ECheckType({
+			expr: EObjectDecl([{
+				expr: {
+					expr: EUntyped({
+						expr: ECall({
+							expr: EConst(CIdent(__js__))
+							pos: #pos
+						}, [{
+							expr: EConst(CString($$tre, DoubleQuotes))
+							pos: #pos
+						}])
+						pos: #pos
+					})
+					pos: #pos
+				}
+				field: $$typeof
+				quotes: Quoted
+			}, {
+				expr: {
+					expr: EParenthesis({
+						expr: ECheckType({
+							expr: EConst(CIdent(Container))
+							pos: #pos
+						}, TPath({
+							name: ReactType
+							pack: [react]
+							params: []
+							sub: null
+						}))
+						pos: #pos
+					})
+					pos: #pos
+				}
+				field: type
+				quotes: null
+			}, {
+				expr: {
+					expr: EObjectDecl([{
+						expr: {
+							expr: EMeta({
+								name: :storedTypedExpr
+								params: []
+								pos: #pos
+							}, {
+								expr: EConst(CInt(100068))
+								pos: #pos
+							})
+							pos: #pos
+						}
+						field: maxWidth
+						quotes: null
+					}, {
+						expr: {
+							expr: EMeta({
+								name: :storedTypedExpr
+								params: []
+								pos: #pos
+							}, {
+								expr: EConst(CInt(100069))
+								pos: #pos
+							})
+							pos: #pos
+						}
+						field: style
+						quotes: null
+					}, {
+						expr: {
+							expr: EMeta({
+								name: :storedTypedExpr
+								params: []
+								pos: #pos
+							}, {
+								expr: EConst(CInt(100070))
+								pos: #pos
+							})
+							pos: #pos
+						}
+						field: component
+						quotes: null
+					}, {
+						expr: {
+							expr: EArrayDecl([{
+								expr: EParenthesis({
+									expr: ECheckType({
+										expr: EObjectDecl([{
+											expr: {
+												expr: EUntyped({
+													expr: ECall({
+														expr: EConst(CIdent(__js__))
+														pos: #pos
+													}, [{
+														expr: EConst(CString($$tre, DoubleQuotes))
+														pos: #pos
+													}])
+													pos: #pos
+												})
+												pos: #pos
+											}
+											field: $$typeof
+											quotes: Quoted
+										}, {
+											expr: {
+												expr: EParenthesis({
+													expr: ECheckType({
+														expr: EConst(CIdent(Typography))
+														pos: #pos
+													}, TPath({
+														name: ReactType
+														pack: [react]
+														params: []
+														sub: null
+													}))
+													pos: #pos
+												})
+												pos: #pos
+											}
+											field: type
+											quotes: null
+										}, {
+											expr: {
+												expr: EObjectDecl([{
+													expr: {
+														expr: EParenthesis({
+															expr: ECheckType({
+																expr: EConst(CString(Sign in, DoubleQuotes))
+																pos: #pos
+															}, TPath({
+																name: StdTypes
+																pack: []
+																params: [TPType(TPath({
+																	name: ReactComponent
+																	pack: [react]
+																	params: []
+																	sub: ReactFragment
+																}))]
+																sub: Null
+															}))
+															pos: #pos
+														})
+														pos: #pos
+													}
+													field: children
+													quotes: null
+												}])
+												pos: #pos
+											}
+											field: props
+											quotes: null
+										}, {
+											expr: {
+												expr: EConst(CIdent(null))
+												pos: #pos
+											}
+											field: key
+											quotes: null
+										}, {
+											expr: {
+												expr: EConst(CIdent(null))
+												pos: #pos
+											}
+											field: ref
+											quotes: null
+										}])
+										pos: #pos
+									}, TPath({
+										name: ReactComponent
+										pack: [react]
+										params: []
+										sub: ReactElement
+									}))
+									pos: #pos
+								})
+								pos: #pos
+							}, {
+								expr: EParenthesis({
+									expr: ECheckType({
+										expr: EObjectDecl([{
+											expr: {
+												expr: EUntyped({
+													expr: ECall({
+														expr: EConst(CIdent(__js__))
+														pos: #pos
+													}, [{
+														expr: EConst(CString($$tre, DoubleQuotes))
+														pos: #pos
+													}])
+													pos: #pos
+												})
+												pos: #pos
+											}
+											field: $$typeof
+											quotes: Quoted
+										}, {
+											expr: {
+												expr: EParenthesis({
+													expr: ECheckType({
+														expr: EConst(CIdent(FormControl))
+														pos: #pos
+													}, TPath({
+														name: ReactType
+														pack: [react]
+														params: []
+														sub: null
+													}))
+													pos: #pos
+												})
+												pos: #pos
+											}
+											field: type
+											quotes: null
+										}, {
+											expr: {
+												expr: EObjectDecl([{
+													expr: {
+														expr: EConst(CIdent(true))
+														pos: #pos
+													}
+													field: noValidate
+													quotes: null
+												}, {
+													expr: {
+														expr: EConst(CString(off, DoubleQuotes))
+														pos: #pos
+													}
+													field: autoComplete
+													quotes: null
+												}, {
+													expr: {
+														expr: EParenthesis({
+															expr: ECheckType({
+																expr: EParenthesis({
+																	expr: ECheckType({
+																		expr: EObjectDecl([{
+																			expr: {
+																				expr: EUntyped({
+																					expr: ECall({
+																						expr: EConst(CIdent(__js__))
+																						pos: #pos
+																					}, [{
+																						expr: EConst(CString($$tre, DoubleQuotes))
+																						pos: #pos
+																					}])
+																					pos: #pos
+																				})
+																				pos: #pos
+																			}
+																			field: $$typeof
+																			quotes: Quoted
+																		}, {
+																			expr: {
+																				expr: EParenthesis({
+																					expr: ECheckType({
+																						expr: EConst(CIdent(TextField))
+																						pos: #pos
+																					}, TPath({
+																						name: ReactType
+																						pack: [react]
+																						params: []
+																						sub: null
+																					}))
+																					pos: #pos
+																				})
+																				pos: #pos
+																			}
+																			field: type
+																			quotes: null
+																		}, {
+																			expr: {
+																				expr: EObjectDecl([{
+																					expr: {
+																						expr: EMeta({
+																							name: :storedTypedExpr
+																							params: []
+																							pos: #pos
+																						}, {
+																							expr: EConst(CInt(100074))
+																							pos: #pos
+																						})
+																						pos: #pos
+																					}
+																					field: onChange
+																					quotes: null
+																				}, {
+																					expr: {
+																						expr: EMeta({
+																							name: :storedTypedExpr
+																							params: []
+																							pos: #pos
+																						}, {
+																							expr: EConst(CInt(100075))
+																							pos: #pos
+																						})
+																						pos: #pos
+																					}
+																					field: fullWidth
+																					quotes: null
+																				}, {
+																					expr: {
+																						expr: EMeta({
+																							name: :storedTypedExpr
+																							params: []
+																							pos: #pos
+																						}, {
+																							expr: EConst(CInt(100076))
+																							pos: #pos
+																						})
+																						pos: #pos
+																					}
+																					field: required
+																					quotes: null
+																				}, {
+																					expr: {
+																						expr: EMeta({
+																							name: :storedTypedExpr
+																							params: []
+																							pos: #pos
+																						}, {
+																							expr: EConst(CInt(100077))
+																							pos: #pos
+																						})
+																						pos: #pos
+																					}
+																					field: size
+																					quotes: null
+																				}, {
+																					expr: {
+																						expr: EMeta({
+																							name: :storedTypedExpr
+																							params: []
+																							pos: #pos
+																						}, {
+																							expr: EConst(CInt(100078))
+																							pos: #pos
+																						})
+																						pos: #pos
+																					}
+																					field: label
+																					quotes: null
+																				}])
+																				pos: #pos
+																			}
+																			field: props
+																			quotes: null
+																		}, {
+																			expr: {
+																				expr: EConst(CIdent(null))
+																				pos: #pos
+																			}
+																			field: key
+																			quotes: null
+																		}, {
+																			expr: {
+																				expr: EConst(CIdent(null))
+																				pos: #pos
+																			}
+																			field: ref
+																			quotes: null
+																		}])
+																		pos: #pos
+																	}, TPath({
+																		name: ReactComponent
+																		pack: [react]
+																		params: []
+																		sub: ReactElement
+																	}))
+																	pos: #pos
+																})
+																pos: #pos
+															}, null <- expected enum value)
+															pos: #pos
+														})
+														pos: #pos
+													}
+													field: children
+													quotes: null
+												}])
+												pos: #pos
+											}
+											field: props
+											quotes: null
+										}, {
+											expr: {
+												expr: EConst(CIdent(null))
+												pos: #pos
+											}
+											field: key
+											quotes: null
+										}, {
+											expr: {
+												expr: EConst(CIdent(null))
+												pos: #pos
+											}
+											field: ref
+											quotes: null
+										}])
+										pos: #pos
+									}, TPath({
+										name: ReactComponent
+										pack: [react]
+										params: []
+										sub: ReactElement
+									}))
+									pos: #pos
+								})
+								pos: #pos
+							}])
+							pos: #pos
+						}
+						field: children
+						quotes: null
+					}])
+					pos: #pos
+				}
+				field: props
+				quotes: null
+			}, {
+				expr: {
+					expr: EConst(CIdent(null))
+					pos: #pos
+				}
+				field: key
+				quotes: null
+			}, {
+				expr: {
+					expr: EConst(CIdent(null))
+					pos: #pos
+				}
+				field: ref
+				quotes: null
+			}])
+			pos: #pos
+		}, TPath({
+			name: ReactComponent
+			pack: [react]
+			params: []
+			sub: ReactElement
+		}))
+		pos: #pos
+	})
+	pos: #pos
+}
+line 371: expected enum value
