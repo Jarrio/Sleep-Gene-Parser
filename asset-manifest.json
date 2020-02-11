@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/static/js/main.7c3a11cc.chunk.js",
-    "main.js.map": "/static/js/main.7c3a11cc.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.20dc1d8c.js",
-    "runtime-main.js.map": "/static/js/runtime-main.20dc1d8c.js.map",
-    "static/js/2.c367e0b2.chunk.js": "/static/js/2.c367e0b2.chunk.js",
-    "static/js/2.c367e0b2.chunk.js.map": "/static/js/2.c367e0b2.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.cec497447de0eaca09cfad183ded09c4.js": "/precache-manifest.cec497447de0eaca09cfad183ded09c4.js",
-    "service-worker.js": "/service-worker.js",
-    "static/js/2.c367e0b2.chunk.js.LICENSE": "/static/js/2.c367e0b2.chunk.js.LICENSE"
+    "main.js": "/Sleep-Gene-Parser/static/js/main.3d09858f.chunk.js",
+    "main.js.map": "/Sleep-Gene-Parser/static/js/main.3d09858f.chunk.js.map",
+    "runtime-main.js": "/Sleep-Gene-Parser/static/js/runtime-main.265ebd0e.js",
+    "runtime-main.js.map": "/Sleep-Gene-Parser/static/js/runtime-main.265ebd0e.js.map",
+    "static/js/2.3878016a.chunk.js": "/Sleep-Gene-Parser/static/js/2.3878016a.chunk.js",
+    "static/js/2.3878016a.chunk.js.map": "/Sleep-Gene-Parser/static/js/2.3878016a.chunk.js.map",
+    "index.html": "/Sleep-Gene-Parser/index.html",
+    "precache-manifest.40e6d7ebc055a2d3aa2ca627fdfa4ac6.js": "/Sleep-Gene-Parser/precache-manifest.40e6d7ebc055a2d3aa2ca627fdfa4ac6.js",
+    "service-worker.js": "/Sleep-Gene-Parser/service-worker.js",
+    "static/js/2.3878016a.chunk.js.LICENSE": "/Sleep-Gene-Parser/static/js/2.3878016a.chunk.js.LICENSE"
   },
   "entrypoints": [
-    "static/js/runtime-main.20dc1d8c.js",
-    "static/js/2.c367e0b2.chunk.js",
-    "static/js/main.7c3a11cc.chunk.js"
+    "static/js/runtime-main.265ebd0e.js",
+    "static/js/2.3878016a.chunk.js",
+    "static/js/main.3d09858f.chunk.js"
   ]
 }
