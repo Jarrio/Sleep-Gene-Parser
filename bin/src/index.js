@@ -9,9 +9,7 @@ function $extend(from, fields) {
 	return proto;
 }
 var Genes = function() { };
-Genes.__name__ = true;
 var HxOverrides = function() { };
-HxOverrides.__name__ = true;
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
 		return this.cur < this.arr.length;
@@ -20,14 +18,12 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() { };
-Main.__name__ = true;
 Main.main = function() {
 	ReactDOM.render({ "$$typeof" : $$tre, type : App._renderWrapper, props : { }, key : null, ref : null},window.document.getElementById("root"));
 };
 var React_Component = require("react").Component;
 var mui_core_styles_Styles = require("@material-ui/core/styles");
 var react__$ReactType_ReactType_$Impl_$ = {};
-react__$ReactType_ReactType_$Impl_$.__name__ = true;
 react__$ReactType_ReactType_$Impl_$.fromString = function(s) {
 	return s;
 };
@@ -38,20 +34,15 @@ react__$ReactType_ReactType_$Impl_$.fromComp = function(cls) {
 	return cls;
 };
 var App = $hx_exports["App"] = function(props) {
-	this.offset = 0;
 	React_Component.call(this,props);
-	this.state = { chart_data : [], content : ""};
+	this.state = { data : [], content : ""};
 };
-App.__name__ = true;
 App.styles = function(theme) {
-	var drawerWidth = 240;
-	return { root : { display : "flex"}, appBar : { width : "calc(100% - " + drawerWidth + "px)", marginRight : drawerWidth}, drawer : { width : drawerWidth, flexShrink : 0}, drawerPaper : { width : drawerWidth}, toolbar : theme.mixins.toolbar, content : { flexGrow : 1, backgroundColor : theme.palette.background.default, padding : theme.spacing(3)}};
+	return { root : { display : "flex"}, appBar : { width : "calc(100% - " + 240 + "px)", marginRight : 240}, drawer : { width : 240, flexShrink : 0}, drawerPaper : { width : 240}, toolbar : theme.mixins.toolbar, content : { flexGrow : 1, backgroundColor : theme.palette.background.default, padding : theme.spacing(3)}};
 };
 App.__super__ = React_Component;
 App.prototype = $extend(React_Component.prototype,{
-	componentDidMount: function() {
-	}
-	,handleUpload: function(data) {
+	handleUpload: function(data) {
 		var _gthis = this;
 		var reader = new FileReader();
 		reader.readAsText(data.target.files[0]);
@@ -62,74 +53,18 @@ App.prototype = $extend(React_Component.prototype,{
 		};
 	}
 	,parseGeneData: function(data) {
-		var _gthis = this;
 		var index = this.parseIndex();
-		var tags = this.parseTags(index);
-		var info = new haxe_ds_StringMap();
-		var _g = new haxe_iterators_MapKeyValueIterator(tags);
-		while(_g.hasNext()) {
-			var _g1 = _g.next();
-			var key = _g1.key;
-			var value = _g1.value;
-			if(__map_reserved[key] != null) {
-				info.setReserved(key,0);
-			} else {
-				info.h[key] = 0;
-			}
-		}
+		this.parseTags(index);
+		var _g = [];
 		var item = new haxe_ds__$StringMap_StringMapIterator(index,index.arrayKeys());
-		while(item.hasNext()) {
-			var item1 = item.next();
-			if(data.toUpperCase().indexOf(item1.snp) != -1) {
-				var _g11 = new haxe_iterators_MapKeyValueIterator(tags);
-				while(_g11.hasNext()) {
-					var _g2 = _g11.next();
-					var key1 = _g2.key;
-					var value1 = _g2.value;
-					var _g3 = 0;
-					while(_g3 < value1.length) {
-						var x = value1[_g3];
-						++_g3;
-						if(x == item1.snp) {
-							var value2 = (__map_reserved[key1] != null ? info.getReserved(key1) : info.h[key1]) + 1;
-							if(__map_reserved[key1] != null) {
-								info.setReserved(key1,value2);
-							} else {
-								info.h[key1] = value2;
-							}
-						}
-					}
-				}
-			}
-		}
-		var map_to_array = [];
-		var _g4 = new haxe_iterators_MapKeyValueIterator(info);
-		while(_g4.hasNext()) {
-			var _g12 = _g4.next();
-			var key2 = _g12.key;
-			var value3 = _g12.value;
-			map_to_array.push({ x : key2, y : value3});
-		}
-		map_to_array.sort(function(a,b) {
-			if(a.y < b.y) {
-				return 1;
-			}
-			if(a.y > b.y) {
-				return -1;
-			}
-			return 0;
-		});
-		this.setState({ chart_data : map_to_array},function() {
-			haxe_Log.trace("Complete",{ fileName : "src/Main.hx", lineNumber : 156, className : "App", methodName : "parseGeneData", customParams : [_gthis.state.chart_data]});
-			return;
-		});
+		while(item.hasNext()) _g.push(item.next());
+		this.setState({ data : _g});
 	}
 	,parseTags: function(data) {
 		var tags = new haxe_ds_StringMap();
 		var item = new haxe_ds__$StringMap_StringMapIterator(data,data.arrayKeys());
 		while(item.hasNext()) {
-			var item1 = item.next();
-			var keys = item1.summary.split(",");
+			var keys = item.next().summary.split(",");
 			var _g1 = 0;
 			while(_g1 < keys.length) {
 				var key = keys[_g1];
@@ -145,16 +80,15 @@ App.prototype = $extend(React_Component.prototype,{
 				}
 			}
 		}
-		var item2 = new haxe_ds__$StringMap_StringMapIterator(data,data.arrayKeys());
-		while(item2.hasNext()) {
-			var item3 = item2.next();
+		var item1 = new haxe_ds__$StringMap_StringMapIterator(data,data.arrayKeys());
+		while(item1.hasNext()) {
+			var item2 = item1.next();
 			var _g11 = new haxe_iterators_MapKeyValueIterator(tags);
 			while(_g11.hasNext()) {
 				var _g2 = _g11.next();
-				var key1 = _g2.key;
 				var value1 = _g2.value;
-				if(item3.summary.indexOf(key1) != -1) {
-					value1.push(item3.snp);
+				if(item2.summary.indexOf(_g2.key) != -1) {
+					value1.push(item2.snp);
 				}
 			}
 		}
@@ -166,13 +100,12 @@ App.prototype = $extend(React_Component.prototype,{
 		var i = 0;
 		var _g = 0;
 		while(_g < split_lines.length) {
-			var line = split_lines[_g];
-			++_g;
+			var line = split_lines[_g++];
 			if(i++ == 0) {
 				continue;
 			}
 			var column = line.split("\t");
-			var value = { gene : column[1], snp : column[2].toUpperCase(), summary : column[5]};
+			var value = { gene : column[1], snp : column[2].toUpperCase(), summary : column[5], source : column[6]};
 			var key = column[2];
 			if(__map_reserved[key] != null) {
 				data.setReserved(key,value);
@@ -182,55 +115,34 @@ App.prototype = $extend(React_Component.prototype,{
 		}
 		return data;
 	}
-	,testComponent: function(data) {
-		var y = this.offset++ % 2 == 0 ? "1em" : "2em";
-		window.console.dir(data);
-		window.console.dir(react_charts_ArgumentAxisLabel);
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_ArgumentAxisLabel), props : Object.assign({ },data,{ dy : y}), key : null, ref : null};
+	,tableContent: function() {
+		var content = [];
+		var i = 0;
+		var _g = 0;
+		var _g1 = this.state.data;
+		while(_g < _g1.length) {
+			var item = _g1[_g];
+			++_g;
+			content.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.gene}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.snp}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.summary}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Link), props : { rel : "noopener", target : "_blank", href : "" + item.source, children : item.source}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null});
+		}
+		return content;
 	}
 	,render: function() {
-		this.offset = 0;
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : this.props.classes.root, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("main"), props : { className : this.props.classes.content, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { container : true, children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_Chart), props : { height : 250, data : this.state.chart_data, children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_ArgumentAxis), props : { labelComponent : $bind(this,this.testComponent)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_ValueAxis), props : { }, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_BarSeries), props : { valueField : "y", argumentField : "x", barWidth : 1}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_Title), props : { text : "Gene Relationships"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_charts_ZoomAndPan), props : { }, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Input), props : { id : "raised-button-file", type : "file", onChange : $bind(this,this.handleUpload)}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		var content = null;
+		if(this.state.data.length == 0) {
+			content = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Input), props : { id : "raised-button-file", type : "file", onChange : $bind(this,this.handleUpload)}, key : null, ref : null}}, key : null, ref : null};
+		} else {
+			content = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Table), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableHead), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Gene"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "SNP"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Summary"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Source"}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableBody), props : { children : this.tableContent()}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
+		}
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : this.props.classes.root, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("main"), props : { className : this.props.classes.content, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { container : true, children : content}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
 });
-Math.__name__ = true;
-var Std = function() { };
-Std.__name__ = true;
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-var haxe_Log = function() { };
-haxe_Log.__name__ = true;
-haxe_Log.formatOutput = function(v,infos) {
-	var str = Std.string(v);
-	if(infos == null) {
-		return str;
-	}
-	var pstr = infos.fileName + ":" + infos.lineNumber;
-	if(infos.customParams != null) {
-		var _g = 0;
-		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v1 = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v1);
-		}
-	}
-	return pstr + ": " + str;
-};
-haxe_Log.trace = function(v,infos) {
-	var str = haxe_Log.formatOutput(v,infos);
-	if(typeof(console) != "undefined" && console.log != null) {
-		console.log(str);
-	}
-};
 var haxe_ds__$StringMap_StringMapIterator = function(map,keys) {
 	this.map = map;
 	this.keys = keys;
 	this.index = 0;
 	this.count = keys.length;
 };
-haxe_ds__$StringMap_StringMapIterator.__name__ = true;
 haxe_ds__$StringMap_StringMapIterator.prototype = {
 	hasNext: function() {
 		return this.index < this.count;
@@ -248,7 +160,6 @@ haxe_ds__$StringMap_StringMapIterator.prototype = {
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
-haxe_ds_StringMap.__name__ = true;
 haxe_ds_StringMap.prototype = {
 	get: function(key) {
 		if(__map_reserved[key] != null) {
@@ -299,7 +210,6 @@ var haxe_iterators_MapKeyValueIterator = function(map) {
 	this.map = map;
 	this.keys = map.keys();
 };
-haxe_iterators_MapKeyValueIterator.__name__ = true;
 haxe_iterators_MapKeyValueIterator.prototype = {
 	hasNext: function() {
 		return this.keys.hasNext();
@@ -309,134 +219,26 @@ haxe_iterators_MapKeyValueIterator.prototype = {
 		return { value : this.map.get(key), key : key};
 	}
 };
-var js__$Boot_HaxeError = function(val) {
-	Error.call(this);
-	this.val = val;
-	if(Error.captureStackTrace) {
-		Error.captureStackTrace(this,js__$Boot_HaxeError);
-	}
-};
-js__$Boot_HaxeError.__name__ = true;
-js__$Boot_HaxeError.__super__ = Error;
-js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-});
-var js_Boot = function() { };
-js_Boot.__name__ = true;
-js_Boot.__string_rec = function(o,s) {
-	if(o == null) {
-		return "null";
-	}
-	if(s.length >= 5) {
-		return "<...>";
-	}
-	var t = typeof(o);
-	if(t == "function" && (o.__name__ || o.__ename__)) {
-		t = "object";
-	}
-	switch(t) {
-	case "function":
-		return "<function>";
-	case "object":
-		if(((o) instanceof Array)) {
-			var str = "[";
-			s += "\t";
-			var _g3 = 0;
-			var _g11 = o.length;
-			while(_g3 < _g11) {
-				var i = _g3++;
-				str += (i > 0 ? "," : "") + js_Boot.__string_rec(o[i],s);
-			}
-			str += "]";
-			return str;
-		}
-		var tostr;
-		try {
-			tostr = o.toString;
-		} catch( e1 ) {
-			var e2 = ((e1) instanceof js__$Boot_HaxeError) ? e1.val : e1;
-			return "???";
-		}
-		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
-			var s2 = o.toString();
-			if(s2 != "[object Object]") {
-				return s2;
-			}
-		}
-		var str1 = "{\n";
-		s += "\t";
-		var hasp = o.hasOwnProperty != null;
-		var k = null;
-		for( k in o ) {
-		if(hasp && !o.hasOwnProperty(k)) {
-			continue;
-		}
-		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
-			continue;
-		}
-		if(str1.length != 2) {
-			str1 += ", \n";
-		}
-		str1 += s + k + " : " + js_Boot.__string_rec(o[k],s);
-		}
-		s = s.substring(1);
-		str1 += "\n" + s + "}";
-		return str1;
-	case "string":
-		return o;
-	default:
-		return String(o);
-	}
-};
-var mui_core_Container = require("@material-ui/core").Container;
 var mui_core_Grid = require("@material-ui/core").Grid;
 var mui_core_Input = require("@material-ui/core").Input;
-var mui_core_Typography = require("@material-ui/core").Typography;
+var mui_core_Link = require("@material-ui/core").Link;
+var mui_core_Table = require("@material-ui/core").Table;
+var mui_core_TableBody = require("@material-ui/core").TableBody;
+var mui_core_TableCell = require("@material-ui/core").TableCell;
+var mui_core_TableHead = require("@material-ui/core").TableHead;
+var mui_core_TableRow = require("@material-ui/core").TableRow;
 var mui_core_styles_MuiPaletteBackground = function(paper,_default) {
 	this.paper = paper;
 	this.default = _default;
 };
-mui_core_styles_MuiPaletteBackground.__name__ = true;
-var pages_Overview = function(props,context) {
-	React_Component.call(this,props,context);
-};
-pages_Overview.__name__ = true;
-pages_Overview.styles = function(theme) {
-	var drawerWidth = 240;
-	return { };
-};
-pages_Overview.__super__ = React_Component;
-pages_Overview.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Container);
-		var tmp1 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Typography),{ paragraph : true},"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt\n\t\t\tut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum\n\t\t\tfacilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit\n\t\t\tgravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id\n\t\t\tdonec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit\n\t\t\tadipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.\n\t\t\tMetus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis\n\t\t\timperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget\n\t\t\tarcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem\n\t\t\tdonec massa sapien faucibus et molestie ac.");
-		var tmp2 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Typography),{ paragraph : true},"Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla\n\t\t\tfacilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac\n\t\t\ttincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat\n\t\t\tconsequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed\n\t\t\tvulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In\n\t\t\thendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et\n\t\t\ttortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin\n\t\t\tnibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas\n\t\t\taccumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.");
-		return React.createElement(tmp,{ },tmp1,tmp2);
-	}
-});
-var React = require("react");
 var ReactDOM = require("react-dom");
-var react_charts_ArgumentAxis = require("@devexpress/dx-react-chart-material-ui").ArgumentAxis;
-var react_charts_ArgumentAxisLabel = require("@devexpress/dx-react-chart-material-ui").ArgumentAxis.Label;
-var react_charts_BarSeries = require("@devexpress/dx-react-chart-material-ui").BarSeries;
-var react_charts_Chart = require("@devexpress/dx-react-chart-material-ui").Chart;
-var react_charts_Title = require("@devexpress/dx-react-chart-material-ui").Title;
-var react_charts_ValueAxis = require("@devexpress/dx-react-chart-material-ui").ValueAxis;
-var react_charts_ZoomAndPan = require("@devexpress/dx-react-chart-material-ui").ZoomAndPan;
 var $_;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
 var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
-String.__name__ = true;
-Array.__name__ = true;
 var __map_reserved = {};
-Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
-	return String(this.val);
-}});
-js_Boot.__toStr = ({ }).toString;
 Genes.data = "Gene\tSNP\tChr\tPhysicial Position\tPhenotype(s)[Gender] Relating to Sleep\tSource 1\tSource 2\tSource 3\n\tARHGEF10L\trs576106307\t1\t18,007,282\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tEPB41\trs2985334\t1\t29,165,643\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tHSD52\trs192315283\t1\t59,531,543\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tINADL\trs12140153\t1\t62,352,479\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tAK5\trs76681500\t1\t77,247,749\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tOR10K1, OR10K2\trs10489832\t1\t155,267,429\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tRGS16\trs694383\t1\t180,834,827\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tASB3\trs76645968\t2\t53,827,686\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tVRK2/LOC647016/LOC100131953\trs1380703\t2\t57,941,287\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tVRK2\trs17190618\t2\t58,882,765\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4975467/\t\t\n\tMEIS1\trs113851554\t2\t66,523,432\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tMEIS1\trs113851554\t2\t66,750,564\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPAX8\trs62158211\t2\t113,822,609\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPAX8\trs62158211\t2\t114,106,139\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPER2\trs3739064\t2\t\tAwakenings\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\tPER2\trs6753456\t2\t\tSWS Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\tPER2\trs934945\t2\t238,246,412\tDiurnal Preference\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC3044841/\t\t\n\tPER2\trs2304672\t2\t238,277,948\tDiurnal Preference, Circadian Regulation\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC3044841/\t\t\n\tMRPS35P1/ MRPS36P1\trs920065\t3\t5,893,776\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tMYRIP\trs6599077\t3\t40,071,622\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFHIT\trs10510835\t3\t60,222,161\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tROBO1\trs182765975\t3\t78,538,431\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCLOCK, TMEM165\trs1801260\t4\t55,435,202\tSleep Duration, Circadian Regulation, Evening Preference, Restless Leg Syndrome\thttps://www.snpedia.com/index.php/Rs1801260\t\t\n\t\trs10520010\t4\t150,482,987\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTMEM144\trs115320831\t4\t159,178,375\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPDE4D\trs1823068\t5\t58,711,806\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTGFBI\trs3792900\t5\t135,393,754\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tDPYSL3\trs35309287\t5\t146,775,386\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tHCRTR2\trs3122163\t6\t55,164,327\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tFAM46A\trs189689339\t6\t82,375,372\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tNCOA7\trs481233\t6\t126,207,158\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tVTA1\trs4896580\t6\t142,518,529\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tWDR27\trs13192566\t6\t169,961,635\tInsomnia Symptoms[M]\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tNPSR1\trs324981\t7\t34,591,353\tSleep Duration, Bedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4045816/\t\n\t\trs2189829\t7\t49,387,124\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFOXP2\trs10953765\t7\t114,291,435\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tING3\trs2525724\t7\t120,203,894\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPTN\trs1725021\t7\t136,350,575\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10503857\t8\t29,909,250\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tEYA1\trs2218488\t8\t72,426,510\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tADCK5\trs376775068\t8\t145,604,659\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs9298693\t9\t13,891,409\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10512058\t9\t76,736,108\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tADARB2\trs7073579\t10\t1,364,007\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPCDH15\trs146977851\t10\t56,570,954\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tHABP2\trs932650\t10\t115,337,349\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPARVA\trs2288292\t11\t12,452,275\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tMTNR1B\trs7942988\t11\t\tREM Latency\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\t\trs949175\t11\t97,242,217\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tOPCML\trs1940013\t11\t131,786,861\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tDEC2\trs121912617\t12\t26,122,364\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC2884988/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5879715/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4096202/\n\tCDCA3, GNB3\trs5443\t12\t6,845,711\tDiurnal Preference\thttps://www.snpedia.com/index.php/Rs5443\t\t\n\t\trs2165207\t12\t72,418,535\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs2061579\t12\t73,224,522\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs8192440\t12\t107,001,328\tCircadian Regulation\thttp://www.sjweh.fi/show_abstract.php?abstract_id=3299&fullText=1#box-fullText\t\t\n\tTMEM132B\trs142261172\t12\t126,049,981\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs10507551\t13\t46,659,884\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tCDADC1\trs10492507\t13\t48,722,291\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10492604\t13\t57,802,314\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10498313\t14\t29,468,627\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs434052\t14\t35,613,399\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFLVCR2\trs10483871\t14\t75,141,034\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPRIMA1/UNC79\trs61980273\t14\t94,218,949\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCPEB1\trs17507216\t15\t83,226,925\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs28168\t16\t55,508,777\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTMEM132E\trs145258459\t17\t32,986,155\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tACBD4\trs531814036\t17\t43,219,921\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs2359894\t18\t40,309,270\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTSHZ2\trs2256551\t20\t51,066,908\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs2247614\t21\t35,553,557\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tOPHN1\trs73536079\tX\t67,154,206\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCYCL1\trs5922858\tX\t82,971,008\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t";
 App._renderWrapper = (mui_core_styles_Styles.withStyles(App.styles))(react__$ReactType_ReactType_$Impl_$.fromComp(App));
 App.__jsxStatic = App._renderWrapper;
-pages_Overview._renderWrapper = (mui_core_styles_Styles.withStyles(pages_Overview.styles))(react__$ReactType_ReactType_$Impl_$.fromComp(pages_Overview));
-pages_Overview.__jsxStatic = pages_Overview._renderWrapper;
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

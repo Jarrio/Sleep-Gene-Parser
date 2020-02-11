@@ -1,11 +1,7 @@
-# -lib coconut.react-core
 -lib material-ui
--lib react-router
--lib react-native-firebase
 -lib react-next
-# -D react_no_inline
-# -D haxe4preview5
 -dce full
+-D analyzer-optimize
 -cp src
 -main Main
 # -D react_global

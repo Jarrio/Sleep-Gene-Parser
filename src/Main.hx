@@ -1,47 +1,16 @@
 package;
 
-import haxe.crypto.Base64;
-import history.History;
-import history.Location;
 import js.Browser;
 import js.html.FileReader;
 import mui.core.*;
-import mui.core.common.CSSPosition;
-import mui.core.drawer.DrawerAnchor;
-import mui.core.drawer.DrawerVariant;
 import mui.core.styles.Classes;
 import mui.core.styles.MuiTheme;
 import mui.core.styles.Styles;
-import mui.core.typography.TypographyVariant;
-import mui.icon.Computer;
-import mui.icon.Inbox;
-import pages.*;
-import pages.Overview;
 import react.ReactComponent;
 import react.ReactDOM;
 import react.ReactMacro.jsx;
-import react.charts.ArgumentAxis;
-import react.charts.BarSeries;
-import react.charts.Chart;
-import react.charts.LineSeries;
-import react.charts.Title;
-import react.charts.ValueAxis;
-import react.charts.ZoomAndPan;
-import react.native.firebase.Firebase;
-import react.native.firebase.FirebaseApp;
-import react.native.firebase.auth.UserCredential.User;
-import react.native.firebase.auth.UserCredential;
-import react.recharts.*;
-import react.router.BrowserRouter;
-import react.router.Link;
-import react.router.ReactRouter;
-import react.router.Route;
-import react.router.Router;
-import react.router.Switch;
 
 class Main {
-	public static var app:FirebaseApp;
-
 	static function main() {
 		ReactDOM.render(jsx('<$App/>'), Browser.document.getElementById('root'));
 	}
@@ -55,12 +24,10 @@ typedef GeneFormat = {
 }
 
 private typedef Props = {
-	> RouteRenderProps,
 	var classes:TClasses;
 }
 
 private typedef State = {
-	@:optional var chart_data:Array<{x:String, y:Int}>;
 	@:optional var data:Array<GeneFormat>;
 	@:optional var content:String;
 }
@@ -99,14 +66,12 @@ class App extends ReactComponentOf<Props, State> {
 	public function new(props) {
 		super(props);
 		state = {
-			chart_data: [],
+			data: [],
 			content: ""
 		}
 	}
 
-	override function componentDidMount() {}
-
-	function handleUpload(data:Dynamic) {
+	private function handleUpload(data:Dynamic) {
 		var reader = new FileReader();
 		reader.readAsText(data.target.files[0]);
 		reader.onload = (response) -> {
@@ -119,42 +84,9 @@ class App extends ReactComponentOf<Props, State> {
 		var index = this.parseIndex();
 		var tags = this.parseTags(index);
 		var info = new Map<String, Int>();
-		for (key => value in tags) {
-			info.set(key, 0);
-		}
 
-		for (item in index) {
-			if (data.toUpperCase().contains(item.snp)) {
-				for (key => value in tags) {
-					for (x in value) {
-						if (x == item.snp) {
-							info.set(key, info.get(key) + 1);
-						}
-					}
-				}
-			}
-		}
-
-		var map_to_array = [];
-		for (key => value in info) {
-			map_to_array.push({
-				x: key,
-				y: value
-			});
-		}
-
-		map_to_array.sort((a, b) -> {
-			if (a.y < b.y) {
-				return 1;
-			}
-
-			if (a.y > b.y) {
-				return -1;
-			}
-
-			return 0;
-		});
-		this.setState({chart_data: map_to_array}, () -> trace("Complete", this.state.chart_data));
+		var data = [for (item in index) item];
+		this.setState({data: data});
 	}
 
 	private function parseTags(data:Map<String, GeneFormat>) {
@@ -199,46 +131,60 @@ class App extends ReactComponentOf<Props, State> {
 		return data;
 	}
 
-	var offset = 0;
-
-	function testComponent(data:Dynamic) {
-		var y = (offset++ % 2 == 0) ? "1em" : "2em";
-		Browser.console.dir(data);
-		Browser.console.dir(ArgumentAxisLabel);
-		return jsx('
-		<ArgumentAxisLabel {...data} dy={y}/>
-		');
+	function tableContent() {
+		var content = [];
+		var i = 0;
+		for (item in this.state.data) {
+			content.push(jsx('<TableRow>
+					<TableCell>${item.gene}</TableCell>
+					<TableCell>${item.snp}</TableCell>
+					<TableCell>${item.summary}</TableCell>
+					<TableCell><Link rel={NoOpener} target={Blank} href="${item.source}">${item.source}</Link></TableCell>
+				</TableRow>'));
+		}
+		return content;
 	}
 
 	override function render() {
-		this.offset = 0;
+		var content = null;
+		if (this.state.data.length == 0) {
+			content = jsx('
+			<Grid item xs={12}>
+				<Input 
+					id="raised-button-file" 
+					type={File}
+					onChange=${this.handleUpload}
+				/> 
+			</Grid>
+			');
+		} else {
+			content = jsx('
+			<Grid item xs={12}>
+			<Table>
+				<TableHead>
+					<TableRow>
+						<TableCell>Gene</TableCell>
+						<TableCell>SNP</TableCell>
+						<TableCell>Summary</TableCell>
+						<TableCell>Source</TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					${this.tableContent()}
+				</TableBody>
+				</Table>
+			</Grid>
+			');
+		}
+
 		return jsx('
 		<div className={props.classes.root}>
 			<main className={props.classes.content}>
 			<Grid container>
-				<Grid item xs={12}>
-				<Chart height={250} data={this.state.chart_data}>
-					<ArgumentAxis 
-						labelComponent={this.testComponent}
-					/>	
-					<ValueAxis />
-
-					<BarSeries valueField="y" argumentField="x" barWidth={2} />
-					<Title text="Gene Relationships" />
-					<ZoomAndPan />
-				</Chart>
-				</Grid>
-				<Grid item xs={12}>
-					<Input 
-						id="raised-button-file" 
-						type={File}
-						onChange=${this.handleUpload}
-					/> 
-				</Grid>
+				$content
 			</Grid>
 			</main>
 		</div>
 	 ');
-
 	}
 }
