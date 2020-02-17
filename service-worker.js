@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Sleep-Gene-Parser/precache-manifest.40e6d7ebc055a2d3aa2ca627fdfa4ac6.js"
+  "/Sleep-Gene-Parser/precache-manifest.e6c225479fa45b2aa5fb37873ecc5e54.js"
 );
 
 self.addEventListener('message', (event) => {
