@@ -7,7 +7,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var Genes = function() { };
 var HxOverrides = function() { };
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
@@ -52,12 +51,14 @@ App.prototype = $extend(React_Component.prototype,{
 		};
 	}
 	,parseGeneData: function(data) {
-		var index = this.parseIndex();
-		this.parseTags(index);
-		var _g = [];
-		var item = new haxe_ds__$StringMap_StringMapIterator(index,index.arrayKeys());
-		while(item.hasNext()) _g.push(item.next());
-		this.setState({ data : _g});
+		var _gthis = this;
+		this.parseIndex(function(index) {
+			_gthis.parseTags(index);
+			var _g = [];
+			var item = new haxe_ds__$StringMap_StringMapIterator(index,index.arrayKeys());
+			while(item.hasNext()) _g.push(item.next());
+			_gthis.setState({ data : _g});
+		});
 	}
 	,parseTags: function(data) {
 		var tags = new haxe_ds_StringMap();
@@ -93,26 +94,31 @@ App.prototype = $extend(React_Component.prototype,{
 		}
 		return tags;
 	}
-	,parseIndex: function() {
-		var split_lines = Genes.data.split("\n");
-		var data = new haxe_ds_StringMap();
-		var i = 0;
-		var _g = 0;
-		while(_g < split_lines.length) {
-			var line = split_lines[_g++];
-			if(i++ == 0) {
-				continue;
-			}
-			var column = line.split("\t");
-			var value = { gene : column[1], snp : column[2].toUpperCase(), summary : column[5], source : column[6]};
-			var key = column[2];
-			if(__map_reserved[key] != null) {
-				data.setReserved(key,value);
-			} else {
-				data.h[key] = value;
-			}
-		}
-		return data;
+	,parseIndex: function(cb) {
+		externs_Fetch.fetch("./genes.tsv").then(function(data) {
+			return data.text().then(function(response) {
+				var split_lines = response.split("\n");
+				var data1 = new haxe_ds_StringMap();
+				var i = 0;
+				var _g = 0;
+				while(_g < split_lines.length) {
+					var line = split_lines[_g++];
+					if(i++ == 0) {
+						continue;
+					}
+					var column = line.split("\t");
+					var value = { all_alleles : column[0], a_allele : column[1], aa_allele : column[2], ag_allele : column[3], g_allele : column[4], t_allele : column[5], gg_allele : column[6], tt_allele : column[7], cc_allele : column[8], ct_allele : column[9], c_allele : column[10], gene : column[12], snp : column[13].toUpperCase(), summary : column[11], source : ""};
+					var key = column[13];
+					if(__map_reserved[key] != null) {
+						data1.setReserved(key,value);
+					} else {
+						data1.h[key] = value;
+					}
+				}
+				cb(data1);
+				return;
+			},null);
+		},null);
 	}
 	,tableContent: function() {
 		var content = [];
@@ -122,7 +128,8 @@ App.prototype = $extend(React_Component.prototype,{
 		while(_g < _g1.length) {
 			var item = _g1[_g];
 			++_g;
-			content.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.gene}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.snp}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.summary}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Link), props : { rel : "noopener", target : "_blank", href : "" + item.source, children : item.source}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null});
+			var snpedia = "https://www.snpedia.com/index.php/" + item.snp.toLowerCase();
+			content.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.all_alleles}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.a_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.aa_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.g_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.gg_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.t_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.tt_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.cc_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.ct_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.c_allele}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : item.gene}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Link), props : { rel : "noopener", target : "_blank", href : snpedia, children : item.snp}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null});
 		}
 		return content;
 	}
@@ -131,11 +138,15 @@ App.prototype = $extend(React_Component.prototype,{
 		if(this.state.data.length == 0) {
 			content = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Input), props : { id : "raised-button-file", type : "file", onChange : $bind(this,this.handleUpload)}, key : null, ref : null}}, key : null, ref : null};
 		} else {
-			content = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Table), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableHead), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Gene"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "SNP"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Summary"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Source"}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableBody), props : { children : this.tableContent()}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
+			content = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { item : true, xs : 12, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Table), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableHead), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableRow), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "All Alleles"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "A Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "A;A Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "G Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "G;G Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "T Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "TT Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "CC Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "CT Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "C Allele"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "Gene"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableCell), props : { children : "SNP"}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_TableBody), props : { children : this.tableContent()}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
 		}
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : this.props.classes.root, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("main"), props : { className : this.props.classes.content, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(mui_core_Grid), props : { container : true, children : content}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
 });
+var externs_Fetch = function() { };
+externs_Fetch.fetch = function(url,options) {
+	return fetch(url);
+};
 var haxe_ds__$StringMap_StringMapIterator = function(map,keys) {
 	this.map = map;
 	this.keys = keys;
@@ -236,7 +247,6 @@ function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id
 $global.$haxeUID |= 0;
 var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 var __map_reserved = {};
-Genes.data = "Gene\tSNP\tChr\tPhysicial Position\tPhenotype(s)[Gender] Relating to Sleep\tSource 1\tSource 2\tSource 3\n\tARHGEF10L\trs576106307\t1\t18,007,282\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tEPB41\trs2985334\t1\t29,165,643\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tHSD52\trs192315283\t1\t59,531,543\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tINADL\trs12140153\t1\t62,352,479\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tAK5\trs76681500\t1\t77,247,749\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tOR10K1, OR10K2\trs10489832\t1\t155,267,429\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tRGS16\trs694383\t1\t180,834,827\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tASB3\trs76645968\t2\t53,827,686\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tVRK2/LOC647016/LOC100131953\trs1380703\t2\t57,941,287\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tVRK2\trs17190618\t2\t58,882,765\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4975467/\t\t\n\tMEIS1\trs113851554\t2\t66,523,432\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tMEIS1\trs113851554\t2\t66,750,564\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPAX8\trs62158211\t2\t113,822,609\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPAX8\trs62158211\t2\t114,106,139\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPER2\trs3739064\t2\t\tAwakenings\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\tPER2\trs6753456\t2\t\tSWS Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\tPER2\trs934945\t2\t238,246,412\tDiurnal Preference\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC3044841/\t\t\n\tPER2\trs2304672\t2\t238,277,948\tDiurnal Preference, Circadian Regulation\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC3044841/\t\t\n\tMRPS35P1/ MRPS36P1\trs920065\t3\t5,893,776\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tMYRIP\trs6599077\t3\t40,071,622\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFHIT\trs10510835\t3\t60,222,161\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tROBO1\trs182765975\t3\t78,538,431\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCLOCK, TMEM165\trs1801260\t4\t55,435,202\tSleep Duration, Circadian Regulation, Evening Preference, Restless Leg Syndrome\thttps://www.snpedia.com/index.php/Rs1801260\t\t\n\t\trs10520010\t4\t150,482,987\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTMEM144\trs115320831\t4\t159,178,375\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tPDE4D\trs1823068\t5\t58,711,806\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTGFBI\trs3792900\t5\t135,393,754\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tDPYSL3\trs35309287\t5\t146,775,386\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tHCRTR2\trs3122163\t6\t55,164,327\tSleep Duration, Insomnia Symptoms, Excessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tFAM46A\trs189689339\t6\t82,375,372\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tNCOA7\trs481233\t6\t126,207,158\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tVTA1\trs4896580\t6\t142,518,529\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tWDR27\trs13192566\t6\t169,961,635\tInsomnia Symptoms[M]\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tNPSR1\trs324981\t7\t34,591,353\tSleep Duration, Bedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4045816/\t\n\t\trs2189829\t7\t49,387,124\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFOXP2\trs10953765\t7\t114,291,435\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tING3\trs2525724\t7\t120,203,894\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPTN\trs1725021\t7\t136,350,575\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10503857\t8\t29,909,250\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tEYA1\trs2218488\t8\t72,426,510\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tADCK5\trs376775068\t8\t145,604,659\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs9298693\t9\t13,891,409\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10512058\t9\t76,736,108\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tADARB2\trs7073579\t10\t1,364,007\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPCDH15\trs146977851\t10\t56,570,954\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tHABP2\trs932650\t10\t115,337,349\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPARVA\trs2288292\t11\t12,452,275\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tMTNR1B\trs7942988\t11\t\tREM Latency\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5267557/\t\t\n\t\trs949175\t11\t97,242,217\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tOPCML\trs1940013\t11\t131,786,861\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tDEC2\trs121912617\t12\t26,122,364\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC2884988/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5879715/\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC4096202/\n\tCDCA3, GNB3\trs5443\t12\t6,845,711\tDiurnal Preference\thttps://www.snpedia.com/index.php/Rs5443\t\t\n\t\trs2165207\t12\t72,418,535\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs2061579\t12\t73,224,522\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs8192440\t12\t107,001,328\tCircadian Regulation\thttp://www.sjweh.fi/show_abstract.php?abstract_id=3299&fullText=1#box-fullText\t\t\n\tTMEM132B\trs142261172\t12\t126,049,981\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs10507551\t13\t46,659,884\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tCDADC1\trs10492507\t13\t48,722,291\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10492604\t13\t57,802,314\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs10498313\t14\t29,468,627\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs434052\t14\t35,613,399\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tFLVCR2\trs10483871\t14\t75,141,034\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tPRIMA1/UNC79\trs61980273\t14\t94,218,949\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCPEB1\trs17507216\t15\t83,226,925\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs28168\t16\t55,508,777\tBedtime\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTMEM132E\trs145258459\t17\t32,986,155\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tACBD4\trs531814036\t17\t43,219,921\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\t\trs2359894\t18\t40,309,270\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tTSHZ2\trs2256551\t20\t51,066,908\tSleep Duration\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\t\trs2247614\t21\t35,553,557\tSleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC1995620/\t\t\n\tOPHN1\trs73536079\tX\t67,154,206\tExcessive Daytime Sleepiness\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t\n\tCYCL1\trs5922858\tX\t82,971,008\tInsomnia Symptoms\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491693/\t\t";
 App._renderWrapper = (mui_core_styles_Styles.withStyles(App.styles))(react__$ReactType_ReactType_$Impl_$.fromComp(App));
 App.__jsxStatic = App._renderWrapper;
 Main.main();

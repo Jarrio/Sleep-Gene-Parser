@@ -1,5 +1,7 @@
 package;
 
+import externs.Fetch;
+import haxe.crypto.Base64;
 import js.Browser;
 import js.html.FileReader;
 import mui.core.*;
@@ -17,6 +19,17 @@ class Main {
 }
 
 typedef GeneFormat = {
+	var all_alleles:String;
+	var a_allele:String;
+	var aa_allele:String;
+	var ag_allele:String;
+	var g_allele:String;
+	var t_allele:String;
+	var gg_allele:String;
+	var tt_allele:String;
+	var cc_allele:String;
+	var ct_allele:String;
+	var c_allele:String;
 	var gene:String;
 	var snp:String;
 	var summary:String;
@@ -81,12 +94,19 @@ class App extends ReactComponentOf<Props, State> {
 	}
 
 	private function parseGeneData(data:String) {
-		var index = this.parseIndex();
-		var tags = this.parseTags(index);
-		var info = new Map<String, Int>();
+		this.parseIndex(function(index) {
+			var tags = this.parseTags(index);
+			var info = new Map<String, Int>();
 
-		var data = [for (item in index) item];
-		this.setState({data: data});
+			var data = [for (item in index) item];
+			this.setState({data: data});
+		});
+		// var index = this.parseIndex();
+		// var tags = this.parseTags(index);
+		// var info = new Map<String, Int>();
+
+		// var data = [for (item in index) item];
+		// this.setState({data: data});
 	}
 
 	private function parseTags(data:Map<String, GeneFormat>) {
@@ -112,34 +132,59 @@ class App extends ReactComponentOf<Props, State> {
 		return tags;
 	}
 
-	private function parseIndex() {
-		var split_lines = Genes.data.split('\n');
-		var data = new Map<String, GeneFormat>();
-		var i = 0;
-		for (line in split_lines) {
-			if (i++ == 0) {
-				continue;
-			}
-			var column = line.split('\t');
-			data.set(column[2], {
-				gene: column[1],
-				snp: column[2].toUpperCase(),
-				summary: column[5],
-				source: column[6]
-			});
-		}
-		return data;
+	private function parseIndex(cb:Map<String, GeneFormat>->Void) {
+		Fetch.fetch('./genes.tsv').then((data) -> {
+			data.text().then((response : String) -> {
+				var split_lines = response.split('\n');
+				var data = new Map<String, GeneFormat>();
+				var i = 0;
+				for (line in split_lines) {
+					if (i++ == 0) {
+						continue;
+					}
+					var column = line.split('\t');
+					data.set(column[13], {
+						all_alleles: column[0],
+						a_allele: column[1],
+						aa_allele: column[2],
+						ag_allele: column[3],
+						g_allele: column[4],
+						t_allele: column[5],
+						gg_allele: column[6],
+						tt_allele: column[7],
+						cc_allele: column[8],
+						ct_allele: column[9],
+						c_allele: column[10],
+						gene: column[12],
+						snp: column[13].toUpperCase(),
+						summary: column[11],
+						source: ""
+					});
+				}
+				cb(data);
+			}, null);
+		}, null);
 	}
 
 	function tableContent() {
 		var content = [];
 		var i = 0;
+
 		for (item in this.state.data) {
+			var snpedia = "https://www.snpedia.com/index.php/" + item.snp.toLowerCase();
 			content.push(jsx('<TableRow>
+					<TableCell>${item.all_alleles}</TableCell>
+					<TableCell>${item.a_allele}</TableCell>
+					<TableCell>${item.aa_allele}</TableCell>
+					<TableCell>${item.g_allele}</TableCell>
+					<TableCell>${item.gg_allele}</TableCell>
+					<TableCell>${item.t_allele}</TableCell>
+					<TableCell>${item.tt_allele}</TableCell>
+					<TableCell>${item.cc_allele}</TableCell>
+					<TableCell>${item.ct_allele}</TableCell>
+					<TableCell>${item.c_allele}</TableCell>
 					<TableCell>${item.gene}</TableCell>
-					<TableCell>${item.snp}</TableCell>
-					<TableCell>${item.summary}</TableCell>
-					<TableCell><Link rel={NoOpener} target={Blank} href="${item.source}">${item.source}</Link></TableCell>
+					<TableCell><Link rel={NoOpener} target={Blank} href={snpedia}>${item.snp}</Link></TableCell>
 				</TableRow>'));
 		}
 		return content;
@@ -163,10 +208,18 @@ class App extends ReactComponentOf<Props, State> {
 			<Table>
 				<TableHead>
 					<TableRow>
+						<TableCell>All Alleles</TableCell>
+						<TableCell>A Allele</TableCell>
+						<TableCell>A;A Allele</TableCell>
+						<TableCell>G Allele</TableCell>
+						<TableCell>G;G Allele</TableCell>
+						<TableCell>T Allele</TableCell>
+						<TableCell>TT Allele</TableCell>
+						<TableCell>CC Allele</TableCell>
+						<TableCell>CT Allele</TableCell>
+						<TableCell>C Allele</TableCell>
 						<TableCell>Gene</TableCell>
 						<TableCell>SNP</TableCell>
-						<TableCell>Summary</TableCell>
-						<TableCell>Source</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
