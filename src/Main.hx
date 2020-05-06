@@ -205,7 +205,7 @@ class App extends ReactComponentOf<Props, State> {
 		} else {
 			content = jsx('
 			<Grid item xs={12}>
-			<Table>
+			<Table stickyHeader style={{backgroundColor: "#f7f7f7"}}>
 				<TableHead>
 					<TableRow>
 						<TableCell>All Alleles</TableCell>
